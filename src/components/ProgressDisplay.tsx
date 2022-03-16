@@ -134,6 +134,7 @@ export function ProgressDisplay<Row extends BaseRow>({
 
     processFile(
       { ...fileState, fieldAssignments: fieldsState.fieldAssignments },
+      externalPreview.columns.map((col) => col.header),
       (deltaCount) => {
         // ignore if stale
         if (oplock !== asyncLockRef.current) {
@@ -166,7 +167,7 @@ export function ProgressDisplay<Row extends BaseRow>({
       // invalidate current oplock on change or unmount
       asyncLockRef.current += 1;
     };
-  }, [ready, fileState, fieldsState]);
+  }, [ready, fileState, fieldsState, externalPreview]);
 
   // simulate asymptotic progress percentage
   const progressPercentage = useMemo(() => {
