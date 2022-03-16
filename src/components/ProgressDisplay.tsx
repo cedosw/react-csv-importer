@@ -167,7 +167,8 @@ export function ProgressDisplay<Row extends BaseRow>({
       // invalidate current oplock on change or unmount
       asyncLockRef.current += 1;
     };
-  }, [ready, fileState, fieldsState, externalPreview]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, fileState, fieldsState]);
 
   // simulate asymptotic progress percentage
   const progressPercentage = useMemo(() => {
