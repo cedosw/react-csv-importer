@@ -290,6 +290,7 @@ export interface ParserInput {
 
 export function processFile<Row extends BaseRow>(
   input: ParserInput,
+  headers: (string | undefined)[],
   reportProgress: (deltaCount: number) => void,
   callback: ParseCallback<Row>
 ): Promise<void> {
@@ -322,13 +323,18 @@ export function processFile<Row extends BaseRow>(
         parser.pause();
 
         const skipped = skipLine && data.length > 0;
+        const mappedColumns = Object.values(fieldAssignments).filter(
+          (index) => index !== undefined
+        );
 
         const rows = (skipped ? data.slice(1) : data).map((row) => {
           const stringRow = (row as unknown[]).map((item) =>
             typeof item === 'string' ? item : ''
           );
 
-          const record = {} as { [name: string]: string | undefined };
+          const record = {} as {
+            [name: string]: string | undefined | { [name: string]: string };
+          };
 
           fieldNames.forEach((fieldName) => {
             const columnIndex = fieldAssignments[fieldName];
@@ -336,6 +342,19 @@ export function processFile<Row extends BaseRow>(
               record[fieldName] = stringRow[columnIndex];
             }
           });
+
+          const metadata: { [name: string]: string } = {};
+
+          for (let i = 0; i < headers.length; i++) {
+            if (!mappedColumns.includes(i)) {
+              const header = headers[i];
+              if (stringRow[i] && header) {
+                metadata[header] = stringRow[i];
+              }
+            }
+          }
+
+          record['metadata'] = metadata;
 
           return record as Row; // @todo look into a more precise setup
         });
