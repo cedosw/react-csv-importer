@@ -323,9 +323,6 @@ export function processFile<Row extends BaseRow>(
         parser.pause();
 
         const skipped = skipLine && data.length > 0;
-        const mappedColumns = Object.values(fieldAssignments).filter(
-          (index) => index !== undefined
-        );
 
         const rows = (skipped ? data.slice(1) : data).map((row) => {
           const stringRow = (row as unknown[]).map((item) =>
@@ -346,11 +343,9 @@ export function processFile<Row extends BaseRow>(
           const metadata: { [name: string]: string } = {};
 
           for (let i = 0; i < headers.length; i++) {
-            if (!mappedColumns.includes(i)) {
-              const header = headers[i];
-              if (stringRow[i] && header) {
-                metadata[header] = stringRow[i];
-              }
+            const header = headers[i];
+            if (stringRow[i] && header) {
+              metadata[header] = stringRow[i];
             }
           }
 
