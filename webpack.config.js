@@ -7,7 +7,8 @@ module.exports = {
   entry: { index: './src/index.ts' },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2',
+    hashFunction: 'sha512',
   },
   module: {
     rules: [
@@ -46,5 +47,5 @@ module.exports = {
   optimization: {
     minimize: false
   },
-  plugins: [new MiniCssExtractPlugin(), new CleanWebpackPlugin()]
+  plugins: [new MiniCssExtractPlugin(), new CleanWebpackPlugin()],
 };

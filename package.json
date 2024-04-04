@@ -24,15 +24,15 @@
     "dist/**"
   ],
   "scripts": {
-    "prepare": "webpack --mode production && dts-bundle-generator -o dist/index.d.ts src/index.ts",
+    "prepare": "cross-env NODE_OPTIONS=--openssl-legacy-provider webpack --mode production && dts-bundle-generator -o dist/index.d.ts src/index.ts",
     "lint": "eslint --max-warnings=0 --ext ts --ext tsx src",
     "lint-fix": "eslint --max-warnings=0 --ext ts --ext tsx src --fix",
     "stylelint": "stylelint \"src/**/*.scss\"",
     "stylelint-fix": "stylelint \"src/**/*.scss\" --fix",
     "test-prep": "yarn global add chromedriver@latest",
     "test": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} mocha --require ts-node/register --timeout 30000 test/**/*.test.ts",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
+    "storybook": "cross-env NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
+    "build-storybook": "cross-env NODE_OPTIONS=--openssl-legacy-provider build-storybook",
     "dist": "yarn prepare"
   },
   "author": "Nick Matantsev <nick.matantsev@beamworks.io>",
